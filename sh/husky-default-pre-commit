@@ -20,10 +20,10 @@ if $HAS_PHP_CS_FIXER; then
 
     CONFIG_FILE="${BIN_PATH}/.php${PHP_VERSION}_cs"
 
-    if [ -e ${CONFIG_FILE} ];then
-        CONFIG="--config=${CONFIG_FILE}"
-    elif [ -e '.php_cs' ];then
+    if [ -e '.php_cs' ];then
         CONFIG='--config=.php_cs'
+    elif [ -e ${CONFIG_FILE} ];then
+        CONFIG="--config=${CONFIG_FILE}"
     else
         CONFIG='--rules=@PSR2'
     fi
