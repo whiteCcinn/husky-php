@@ -12,8 +12,8 @@ In composer.json
 
 ```
     "require-dev": {
-        "composer-husky-plugin": "^0.1.0",
-        "husky-php": "^0.1.0"
+        "ccinn/composer-husky-plugin": "^0.1.0",
+        "ccinn/husky-php": "^0.1.0"
     },
 ```
 
@@ -22,7 +22,7 @@ Or
 In Shell
 
 ```sh
-composer require -dev composer-husky-plugin husky-php
+composer require -dev ccinn/composer-husky-plugin ccinn/husky-php
 ```
 
 ## Usage
