@@ -27,7 +27,7 @@
     {
       "type": "composer",
       "url": "https://packagist.laravel-china.org"
-    },
+    }
   ],
   "bin": [
     "husky-php",
