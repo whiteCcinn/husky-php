@@ -58,7 +58,7 @@ huksy-php-pre-commit
 
 By default, the pre - commit
 
-Default support functions:
+Default support features:
 
 1. Detect code conflicts
 
