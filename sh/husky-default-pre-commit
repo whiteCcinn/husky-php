@@ -1,0 +1,47 @@
+#!/usr/bin/env bash
+
+echo "husky default pre commit hook start"
+
+BIN_PATH='{{BIN_PATH}}'
+PHP_CS_FIXER="${BIN_PATH}/php-cs-fixer"
+PHP_VERSION='{{PHP_VERSION}}'
+
+HAS_PHP_CS_FIXER=false
+
+if [ -x "$PHP_CS_FIXER" ]; then
+    HAS_PHP_CS_FIXER=true
+fi
+
+if $HAS_PHP_CS_FIXER; then
+
+    if [[ ${PHP_VERSION} == '{{''PHP_VERSION}}''}}' ]];then
+        PHP_VERSION=$(php -v | awk -F ' ' '{print $2}' | head -n 1 | awk -F '.' '{print $1$2}')
+    fi
+
+    CONFIG_FILE="${BIN_PATH}/.php${PHP_VERSION}_cs"
+
+    if [ -e ${CONFIG_FILE} ];then
+        CONFIG="--config=${CONFIG_FILE}"
+    elif [ -e '.php_cs' ];then
+        CONFIG='--config=.php_cs'
+    else
+        CONFIG='--rules=@PSR2'
+    fi
+
+    git status --porcelain | grep -e '^[AM]\(.*\).php$' | cut -c 3- | while read line; do
+        ${PHP_CS_FIXER} fix ${CONFIG} --verbose ${line} --using-cache=no
+        if [ $? -eq 0 ];then
+          git add "$line"
+        else
+          echo "fix {$line} fail!!!"
+        fi
+    done
+else
+    echo ""
+    echo "Please install php-cs-fixer, e.g.:"
+    echo ""
+    echo "  composer require --dev friendsofphp/php-cs-fixer:^2.14.0"
+    echo ""
+fi
+
+echo "husky default pre commit hook finish"
