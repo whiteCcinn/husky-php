@@ -58,6 +58,10 @@ huksy-php-pre-commit
 
 By default, the pre - commit
 
-Integrated with PHP-cs-fixer
+Default support functions:
 
-So when you leave the pre-commit hook undefined, it will perform the action that will automatically format the code for you
+1. Detect code conflicts
+
+2. Test code specifications
+
+3. Check code syntax
