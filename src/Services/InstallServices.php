@@ -41,9 +41,13 @@ class InstallServices extends BaseServices
 
         $this->script = Util::getScript($this->fs->makePathRelative($this->huskyDir, $this->rootDir) . $this->binFile);
 
+        // default pre-commit
         $this->fs->writeFileSync($this->conf['hooks']['pre-commit'], str_replace('{{BIN_PATH}}',
             $this->fs->makePathRelative($this->phpDir . DIRECTORY_SEPARATOR . Util::$vendor,
                 $this->rootDir) . 'bin', $this->fs->readFileSync($this->conf['hooks']['pre-commit'])));
+
+        $this->fs->writeFileSync($this->conf['hooks']['pre-commit'], str_replace('{{PHP_PROJECT_PATH}}',
+            $this->phpDir, $this->fs->readFileSync($this->conf['hooks']['pre-commit'])));
 
         if (isset($this->composerJson['require']['php'])) {
             preg_match('/(?P<php_version>\d+(\.?\d)*$)/', $this->composerJson['require']['php'], $match);

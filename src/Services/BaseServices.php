@@ -20,7 +20,7 @@ abstract class BaseServices implements BaseServicesInterface
 
     protected $conf = [
         'hooks' => [
-            'pre-commit' => 'husky-default-pre-commit'
+            'pre-commit' => 'husky-default-pre-commit',
         ]
     ];
 

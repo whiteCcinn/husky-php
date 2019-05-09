@@ -238,7 +238,7 @@ class Util
     {
         $huskyrc = '~/.huskyrc';
         $render = <<<SHELL
-#!/bin/sh
+#!/bin/bash
 # husky-php
 
 # Hook created by Husky
@@ -253,9 +253,14 @@ if [ -f "\$scriptPath" ]; then
     . ${huskyrc}
   fi
   php "\${scriptPath}" \${command} \${hookName} "\${gitParams}"
+  
+  if [ $? -ne 0 ];then
+      echo -e "\033[31m\${hookName} Operation interrupted\033[0m"
+      exit 1
+  fi
 else
-  echo "Can't find Husky, skipping \${hookName} hook"
-  echo "You can reinstall it using 'composer require husky-php' or delete this hook"
+  echo -e "\033[33mCan't find Husky, skipping \${hookName} hook\033[0m"
+  echo -e "\033[33mYou can reinstall it using 'composer require husky-php' or delete this hook\033[0m"
 fi
 
 SHELL;

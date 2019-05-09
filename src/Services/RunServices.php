@@ -40,7 +40,8 @@ class RunServices extends BaseServices
                     if (strtoupper(substr(PHP_OS, 0, 3)) === 'WIN') {
                         $shell = "bash ${shell}";
                     }
-                    system($shell);
+                    system($shell,$returnCode);
+                    exit($returnCode);
                 }
             }
         }

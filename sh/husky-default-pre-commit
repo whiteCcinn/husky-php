@@ -1,11 +1,24 @@
 #!/usr/bin/env bash
 
-echo "husky default pre commit hook start"
+echo -e "husky default pre commit hook start"
 
 BIN_PATH='{{BIN_PATH}}'
 PHP_CS_FIXER="${BIN_PATH}/php-cs-fixer"
 PHP_VERSION='{{PHP_VERSION}}'
+PHP_PROJECT_PATH='{{PHP_PROJECT_PATH}}'
 
+cd ${PHP_PROJECT_PATH}
+# Code conflict's check
+for file in $(git --no-pager diff --cached --name-only)
+do
+	git show ":$file" | grep "<<< HEAD" > /dev/null
+	if [ $? -eq 0 ]; then
+		echo -e "\033[31m\033[43;31m${file}\033[0;31m Your code has conflict!\033[0m"
+		exit 1
+	fi
+done
+
+# php-cs-fixer's check
 HAS_PHP_CS_FIXER=false
 
 if [ -x "$PHP_CS_FIXER" ]; then
@@ -20,7 +33,7 @@ if $HAS_PHP_CS_FIXER; then
 
     CONFIG_FILE="${BIN_PATH}/.php${PHP_VERSION}_cs"
 
-    if [ -e '.php_cs' ];then
+    if [ -e "${PHP_PROJECT_PATH}/.php_cs" ];then
         CONFIG='--config=.php_cs'
     elif [ -e ${CONFIG_FILE} ];then
         CONFIG="--config=${CONFIG_FILE}"
@@ -29,13 +42,30 @@ if $HAS_PHP_CS_FIXER; then
     fi
 
     git status --porcelain | grep -e '^[AM]\(.*\).php$' | cut -c 3- | while read line; do
-        ${PHP_CS_FIXER} fix ${CONFIG} --verbose ${line} --using-cache=no
-        if [ $? -eq 0 ];then
-          git add "$line"
+        output=$(${PHP_CS_FIXER} fix ${CONFIG} --verbose ${line} --using-cache=no 2>&1)
+        echo "${output}"
+        lines=$(echo "${output}" | wc -l)
+        if [ ${lines} -eq 5 ];then
+            dstLine=2
         else
-          echo "fix {$line} fail!!!"
+            dstLine=3
         fi
+        marker=$(echo "${output}" | sed -n -e "${dstLine}p")
+        case ${marker} in
+            '.'|'F')
+                git add "$line"
+             ;;
+             *)
+                echo -e "\033[31mAttention：\033[43;31m${line}\033[0;31m,which not success !\033[0m"
+                exit 1
+             ;;
+        esac
     done
+    code=$?
+    if [ ${code} -ne 0 ];then
+        echo -e "\033[31mhusky default pre commit hook interrupt\033[0m"
+        exit ${code}
+    fi
 else
     echo ""
     echo "Please install php-cs-fixer, e.g.:"
@@ -44,4 +74,4 @@ else
     echo ""
 fi
 
-echo "husky default pre commit hook finish"
+echo -e "husky default pre commit hook finish"
