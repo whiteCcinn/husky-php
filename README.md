@@ -65,3 +65,7 @@ Default support features:
 2. Test code specifications
 
 3. Check code syntax
+
+## Window User
+
+You need run in `bash` environment, for example：`GitBash`
