@@ -32,12 +32,10 @@ you can also configure hooks using `.huskyrc` or `.huskyrc.json` file.
 ```json
 // .huskyrc or .huskyrc.json
 {
-  "husky": {
-    "hooks": {
-      "pre-commit": "echo 'huksy-php-pre-commit'",
-      "pre-push": "echo 'huksy-php-pre-push'",
-      "...": "..."
-    }
+  "hooks": {
+    "pre-commit": "echo 'huksy-php-pre-commit'",
+    "pre-push": "echo 'huksy-php-pre-push'",
+    "...": "..."
   }
 }
 ```
