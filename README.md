@@ -22,7 +22,7 @@ Or
 In Shell
 
 ```sh
-composer require -dev ccinn/composer-husky-plugin ccinn/husky-php
+composer require --dev ccinn/composer-husky-plugin ccinn/husky-php
 ```
 
 ## Usage
