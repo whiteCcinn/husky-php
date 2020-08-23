@@ -13,22 +13,17 @@
   ],
   "description": "Similar to js-husky client git hook implementation",
   "require": {
+    "php": ">=7",
     "ext-json": "*",
-    "symfony/console": "~3.2",
-    "symfony/filesystem": "~3.4",
-    "ccinn/php-cs-fixer-config": "^0.1.0"
+    "ccinn/php-cs-fixer-config": "^0.1.0",
+    "symfony/console": "^3.4|^4|^5",
+    "symfony/filesystem": "^3.4|^4|^5"
   },
   "autoload": {
     "psr-4": {
       "App\\": "src/"
     }
   },
-  "repositories": [
-    {
-      "type": "composer",
-      "url": "https://packagist.laravel-china.org"
-    }
-  ],
   "bin": [
     "husky-php",
     "sh/husky-default-pre-commit"
