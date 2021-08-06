@@ -10,15 +10,15 @@
  * with this source code in the file LICENSE.
  */
 
-if (!defined('PHP_VERSION_ID') || \PHP_VERSION_ID < 50600 || \PHP_VERSION_ID >= 70400) {
-    fwrite(STDERR, "PHP needs to be a minimum version of PHP 5.6.0 and maximum version of PHP 7.3.*.\n");
+if (!\defined('PHP_VERSION_ID') || \PHP_VERSION_ID < 70400 || \PHP_VERSION_ID >= 70500) {
+    \fwrite(STDERR, "PHP needs to be a minimum version of PHP 7.4.0 and maximum version of PHP 7.4.*.\n");
     exit(1);
 }
 
-if (file_exists(dirname(dirname(__DIR__)) . DIRECTORY_SEPARATOR . 'autoload.php')) {
-    require_once dirname(dirname(__DIR__)) . DIRECTORY_SEPARATOR . 'autoload.php';
+if (\file_exists(\dirname(\dirname(__DIR__)) . DIRECTORY_SEPARATOR . 'autoload.php')) {
+    require_once \dirname(\dirname(__DIR__)) . DIRECTORY_SEPARATOR . 'autoload.php';
 } else {
-    require_once __DIR__.'/vendor/autoload.php';
+    require_once __DIR__ . '/vendor/autoload.php';
 }
 
 use Symfony\Component\Console\Application;
@@ -26,15 +26,15 @@ use Symfony\Component\Console\Application;
 $application = new Application();
 
 foreach (\App\Util\Util::getAllCommands() as $command) {
-    $class = substr($command, 0, strpos($command, '.'));
+    $class = \substr($command, 0, \strpos($command, '.'));
     $className = "\App\Commands\\${class}";
-    $application->add(new $className);
+    $application->add(new $className());
 }
 
 try {
     $application->run();
 } catch (Exception $e) {
-    print_r($e->getTrace());
+    \print_r($e->getTrace());
 }
 
 __HALT_COMPILER();

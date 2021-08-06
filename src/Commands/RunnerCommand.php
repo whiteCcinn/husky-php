@@ -25,5 +25,6 @@ class RunnerCommand extends Command
     {
         $runServices = new RunServices($input, $output);
         $runServices->run();
+        return 0;
     }
 }

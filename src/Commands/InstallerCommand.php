@@ -23,5 +23,6 @@ class InstallerCommand extends Command
     {
         $installServices = new InstallServices($input, $output);
         $installServices->run();
+        return 0;
     }
 }

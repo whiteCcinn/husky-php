@@ -22,5 +22,6 @@ class UnInstallerCommand extends Command
     {
         $installServices = new UnInstallServices($input, $output);
         $installServices->run();
+        return 0;
     }
 }

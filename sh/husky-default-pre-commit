@@ -2,17 +2,21 @@
 
 echo -e "husky default pre commit hook start"
 
-BIN_PATH='{{BIN_PATH}}'
+BIN_PATH='vendor/bin'
 PHP_CS_FIXER="${BIN_PATH}/php-cs-fixer"
-PHP_VERSION='{{PHP_VERSION}}'
-PHP_PROJECT_PATH='{{PHP_PROJECT_PATH}}'
+PHP_VERSION='70'
+PHP_PROJECT_PATH='/www'
 
 cd ${PHP_PROJECT_PATH}
 # Code conflict's check
 for file in $(git --no-pager diff --cached --name-only)
 do
+	if [[ "$file" == "sh/husky-default-pre-commit" ]] ; then
+		continue
+	fi
 	git show ":$file" | grep "<<< HEAD" > /dev/null
-	if [ $? -eq 0 ]; then
+	status=$?
+	if [ $status -eq 0 ]; then
 		echo -e "\033[31m\033[43;31m${file}\033[0;31m Your code has conflict!\033[0m"
 		exit 1
 	fi
