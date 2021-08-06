@@ -1,15 +1,16 @@
-ARG PHP_VERION=7.4
-FROM php:${PHP_VERION}-cli
+ARG PHP_VERION=8.0.9
+FROM php:${PHP_VERION}-cli-alpine3.14
 
 MAINTAINER whiteCcinn <471113744@qq.com>
 
-RUN apt update && \
-    apt install -y \
+RUN apk update && \
+    apk add \
     git \
     zip \
     unzip \
     libzip-dev \
-    vim
+    vim \
+    bash
 
 RUN docker-php-ext-install zip
 

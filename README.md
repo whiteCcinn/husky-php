@@ -28,7 +28,7 @@ composer require --dev ccinn/composer-husky-plugin ccinn/husky-php
 ## Docker
 
 ```
-docker build --build-arg PHP_VERION=7.4 -t huksy-php .
+docker build --build-arg PHP_VERION=8.0.9 -t huksy-php .
 ```
 
 ## Usage

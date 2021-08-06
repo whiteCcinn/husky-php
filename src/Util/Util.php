@@ -155,7 +155,7 @@ class Util
                 $dirName = dirname($dirName);
                 $level--;
             }
-        } else if ((int)substr(PHP_VERSION, 0, 1) === static::PHP7) {
+        } else if ((int)substr(PHP_VERSION, 0, 1) >= static::PHP7) {
             $dirName = dirname($path, $level);
         } else {
             die('Not support php version');

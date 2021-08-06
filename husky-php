@@ -10,8 +10,8 @@
  * with this source code in the file LICENSE.
  */
 
-if (!\defined('PHP_VERSION_ID') || \PHP_VERSION_ID < 70400 || \PHP_VERSION_ID >= 70500) {
-    \fwrite(STDERR, "PHP needs to be a minimum version of PHP 7.4.0 and maximum version of PHP 7.4.*.\n");
+if (!\defined('PHP_VERSION_ID') || \PHP_VERSION_ID < 80000) {
+    \fwrite(STDERR, "PHP needs to be a minimum version of PHP 8.0.0 \n");
     exit(1);
 }
 
