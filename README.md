@@ -25,6 +25,12 @@ In Shell
 composer require --dev ccinn/composer-husky-plugin ccinn/husky-php
 ```
 
+## Docker
+
+```
+docker build --build-arg PHP_VERION=7.4 -t huksy-php .
+```
+
 ## Usage
 
 you can also configure hooks using `.huskyrc` or `.huskyrc.json` file.
