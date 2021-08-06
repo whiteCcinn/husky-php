@@ -13,7 +13,7 @@ In composer.json
 ```
     "require-dev": {
         "ccinn/composer-husky-plugin": "^0.1.0",
-        "ccinn/husky-php": "^0.1.0"
+        "ccinn/husky-php": "^0.2.0"
     },
 ```
 
