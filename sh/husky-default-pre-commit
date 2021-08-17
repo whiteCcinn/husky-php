@@ -2,26 +2,23 @@
 
 echo -e "husky default pre commit hook start"
 
-BIN_PATH='vendor/bin'
+BIN_PATH='{{BIN_PATH}}'
 PHP_CS_FIXER="${BIN_PATH}/php-cs-fixer"
-PHP_VERSION='70'
-PHP_PROJECT_PATH='/www'
+PHP_VERSION='{{PHP_VERSION}}'
+PHP_PROJECT_PATH='{{PHP_PROJECT_PATH}}'
 
-cd ${PHP_PROJECT_PATH}
+#cd ${PHP_PROJECT_PATH}
 # Code conflict's check
 for file in $(git --no-pager diff --cached --name-only)
 do
-	if [[ "$file" == "sh/husky-default-pre-commit" ]] ; then
-		continue
-	fi
-	git show ":$file" | grep "<<< HEAD" > /dev/null
-	status=$?
-	if [ $status -eq 0 ]; then
-		echo -e "\033[31m\033[43;31m${file}\033[0;31m Your code has conflict!\033[0m"
-		exit 1
-	fi
+    git show ":$file" | grep "<<< HEAD" > /dev/null
+    if [ $? -eq 0 ]; then
+        echo -e "\033[31m\033[43;31m${file}\033[0;31m Your code has conflict!\033[0m"
+        exit 1
+    fi
 done
 
+#cd -
 # php-cs-fixer's check
 HAS_PHP_CS_FIXER=false
 
@@ -48,22 +45,11 @@ if $HAS_PHP_CS_FIXER; then
     git status --porcelain | grep -e '^[AM]\(.*\).php$' | cut -c 3- | while read line; do
         output=$(${PHP_CS_FIXER} fix ${CONFIG} --verbose ${line} --using-cache=no 2>&1)
         echo "${output}"
-        lines=$(echo "${output}" | wc -l)
-        if [ ${lines} -eq 5 ];then
-            dstLine=2
-        else
-            dstLine=3
+        if ! echo "$output" | grep -E '^[\.F]$'; then
+            echo -e "\033[31mAttention：\033[43;31m${line}\033[0;31m,which not success !\033[0m"
+            exit 1
         fi
-        marker=$(echo "${output}" | sed -n -e "${dstLine}p")
-        case ${marker} in
-            '.'|'F')
-                git add "$line"
-             ;;
-             *)
-                echo -e "\033[31mAttention：\033[43;31m${line}\033[0;31m,which not success !\033[0m"
-                exit 1
-             ;;
-        esac
+        git add "$line"
     done
     code=$?
     if [ ${code} -ne 0 ];then
