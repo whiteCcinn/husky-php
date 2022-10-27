@@ -42,7 +42,7 @@ docker build --build-arg PHP_VERION=8.0.9 -t huksy-php .
 
 you can also configure hooks using `.huskyrc` or `.huskyrc.json` file.
 
-```json
+```json5
 // .huskyrc or .huskyrc.json
 {
   "hooks": {
