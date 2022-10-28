@@ -46,8 +46,8 @@ you can also configure hooks using `.huskyrc` or `.huskyrc.json` file.
 // .huskyrc or .huskyrc.json
 {
   "hooks": {
-    "pre-commit": "echo 'huksy-php-pre-commit'",
-    "pre-push": "echo 'huksy-php-pre-push'",
+    "pre-commit": "echo 'husky-php-pre-commit'",
+    "pre-push": "echo 'husky-php-pre-push'",
     "...": "..."
   }
 }
@@ -62,7 +62,7 @@ git commit -m 'Keep calm and commit'
 You will see
 
 ```
-huksy-php-pre-commit
+husky-php-pre-commit
 ```
 
 ## Default
