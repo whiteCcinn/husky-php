@@ -1,5 +1,5 @@
 {
   "hooks": {
-    "pre-commit": "echo 'this is huksy-php-pre-commit'"
+    "pre-commit": "echo 'this is husky-php-pre-commit'"
   }
 }
