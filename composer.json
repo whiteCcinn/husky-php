@@ -1,6 +1,7 @@
 {
   "name": "ccinn/husky-php",
   "type": "library",
+  "description": "Similar to js-husky client git hook implementation",
   "keywords": [
     "php",
     "husky"
@@ -11,13 +12,14 @@
       "email": "471113744@qq.com"
     }
   ],
-  "description": "Similar to js-husky client git hook implementation",
   "require": {
-    "php": ">=7.4",
+    "php": ">=8.0",
     "ext-json": "*",
-    "ccinn/php-cs-fixer-config": "^0.1.0",
-    "symfony/console": "^3.4|^4|^5",
-    "symfony/filesystem": "^3.4|^4|^5"
+    "symfony/console": "^5.4|^6",
+    "symfony/filesystem": "^5.4|^6"
+  },
+  "require-dev": {
+    "friendsofphp/php-cs-fixer": "^3.13"
   },
   "autoload": {
     "psr-4": {
@@ -27,5 +29,9 @@
   "bin": [
     "husky-php",
     "sh/husky-default-pre-commit"
-  ]
+  ],
+  "scripts": {
+    "php-cs-fixer": "vendor/bin/php-cs-fixer fix --verbose",
+    "php-cs-fixer-dry-run": "vendor/bin/php-cs-fixer fix --verbose --diff --dry-run"
+  }
 }

@@ -21,7 +21,7 @@ abstract class BaseServices implements BaseServicesInterface
     protected $conf = [
         'hooks' => [
             'pre-commit' => 'husky-default-pre-commit',
-        ]
+        ],
     ];
 
     protected $binFile = 'husky-php';
@@ -63,22 +63,22 @@ abstract class BaseServices implements BaseServicesInterface
         'push-to-checkout',
         'pre-auto-gc',
         'post-rewrite',
-        'sendemail-validate'
+        'sendemail-validate',
     ];
 
     public function __construct(InputInterface $input, OutputInterface $output)
     {
-        $this->input = $input;
-        $this->output = $output;
-        $this->fs = new FileSystem();
+        $this->input    = $input;
+        $this->output   = $output;
+        $this->fs       = new FileSystem();
         $this->huskyDir = Util::getDirName(__DIR__, 2);
-        $this->userDir = Util::getUserDir();
+        $this->userDir  = Util::getUserDir();
 
         $composerPath = $this->composerPath = Util::getFileOrDirPath($this->userDir, 'composer.json');
-        if (is_array($composerPath)) {
+        if (\is_array($composerPath)) {
             $this->output->writeln([
                 'Can\'t find composer.json, skipping Git hooks installation.',
-                'Please check that your project has a composer.json or create it and reinstall husky-php.'
+                'Please check that your project has a composer.json or create it and reinstall husky-php.',
             ]);
 
             exit(1);
@@ -91,9 +91,9 @@ abstract class BaseServices implements BaseServicesInterface
         }
         unset($defaultCommand);
 
-        $composerJson =json_decode($this->fs->readFileSync($composerPath), true);
+        $composerJson =\json_decode($this->fs->readFileSync($composerPath), true);
 
-        if (json_last_error() !== JSON_ERROR_NONE) {
+        if (\json_last_error() !== JSON_ERROR_NONE) {
             $composerJson = [];
         }
 
@@ -124,5 +124,4 @@ abstract class BaseServices implements BaseServicesInterface
         $this->execute();
         $this->after();
     }
-
 }

@@ -20,15 +20,15 @@ class Util
     public static function getAllFiles($dir)
     {
         $fileArr = [];
-        if (is_dir($dir)) {
-            if ($dh = @opendir($dir)) {
-                while (($file = readdir($dh)) !== false) {
-                    if ($file != '.' && $file != '..') {
+        if (\is_dir($dir)) {
+            if ($dh = @\opendir($dir)) {
+                while (($file = \readdir($dh)) !== false) {
+                    if ($file !== '.' && $file !== '..') {
                         $fileArr[] = $file;
                     }
                 }
                 //关闭
-                closedir($dh);
+                \closedir($dh);
             }
         }
 
@@ -47,44 +47,44 @@ class Util
 //        static $arr = [];
 
         static $dstPath = '';
-        $files = [];
+        $files          = [];
 
         if ($clear) {
             $dstPath = '';
         }
 
-        if (is_dir($fileOrDir)) {
-            $handle = @opendir($fileOrDir);
-            while ($file = readdir($handle)) {
-                if (!in_array($file, ['.', '..']) && strpos($file, '.') !== 0) {
+        if (\is_dir($fileOrDir)) {
+            $handle = @\opendir($fileOrDir);
+            while ($file = \readdir($handle)) {
+                if (!\in_array($file, ['.', '..'], true) && \mb_strpos($file, '.') !== 0) {
                     $files[] = $file;
                 }
             }
 
             // exclude npm directory
             if (
-                !in_array('package.json', $files)
+                !\in_array('package.json', $files, true)
                 ||
-                (in_array('package.json', $files) && in_array('composer.json', $files))
+                (\in_array('package.json', $files, true) && \in_array('composer.json', $files, true))
             ) {
                 foreach ($files as $file) {
-                    $path = $fileOrDir . "/" . $file;
+                    $path = $fileOrDir . '/' . $file;
 
                     if (!empty($dstDir) && $dstDir === $file) {
                         $dstPath = $path;
 
-                        @closedir($handle);
+                        @\closedir($handle);
 
                         return $dstPath;
                     }
 //                    array_push($arr, $path);
-                    if (is_dir($path)) {
+                    if (\is_dir($path)) {
                         self::getFileOrDirPath($path, $dstDir);
                     }
                 }
             }
 
-            @closedir($handle);
+            @\closedir($handle);
         }
 
         return !empty($dstDir) && !empty($dstPath) ? $dstPath : [];
@@ -113,7 +113,7 @@ class Util
 
         $result = [];
         foreach ($files as $file) {
-            if (strtolower(pathinfo($file, PATHINFO_EXTENSION)) === strtolower($extension)) {
+            if (\mb_strtolower(\pathinfo($file, PATHINFO_EXTENSION)) === \mb_strtolower($extension)) {
                 $result[] = $file;
             }
         }
@@ -133,7 +133,7 @@ class Util
 
         $result = [];
         foreach ($files as $file) {
-            if (preg_match($pattern, $file, $match)) {
+            if (\preg_match($pattern, $file, $match)) {
                 $result[] = $file;
             }
         }
@@ -149,14 +149,14 @@ class Util
      */
     public static function getDirName($path, $level = 1)
     {
-        if ((int)substr(PHP_VERSION, 0, 1) === static::PHP5) {
+        if ((int)\mb_substr(PHP_VERSION, 0, 1) === static::PHP5) {
             $dirName = $path;
             while ($level > 0) {
-                $dirName = dirname($dirName);
+                $dirName = \dirname($dirName);
                 $level--;
             }
-        } else if ((int)substr(PHP_VERSION, 0, 1) >= static::PHP7) {
-            $dirName = dirname($path, $level);
+        } elseif ((int)\mb_substr(PHP_VERSION, 0, 1) >= static::PHP7) {
+            $dirName = \dirname($path, $level);
         } else {
             die('Not support php version');
         }
@@ -168,7 +168,7 @@ class Util
     {
         $path = __DIR__;
 
-        while (substr($path, -strlen(self::$vendor)) !== self::$vendor) {
+        while (\mb_substr($path, -\mb_strlen(self::$vendor)) !== self::$vendor) {
             if ($path === '/') {
                 return false;
             }
@@ -180,7 +180,7 @@ class Util
 
     public static function getUserDir()
     {
-        $path = str_replace('\\', '/', getcwd());
+        $path = \str_replace('\\', '/', \getcwd());
 
         $path = self::getGitDir($path);
 
@@ -211,7 +211,7 @@ class Util
     {
         $dir = '.git';
 
-        if (file_exists($path . DIRECTORY_SEPARATOR . $dir)) {
+        if (\file_exists($path . DIRECTORY_SEPARATOR . $dir)) {
             return true;
         }
 
@@ -227,7 +227,7 @@ class Util
     {
         $file = 'composer.json';
 
-        if (file_exists($path . DIRECTORY_SEPARATOR . $file)) {
+        if (\file_exists($path . DIRECTORY_SEPARATOR . $file)) {
             return true;
         }
 
@@ -237,7 +237,7 @@ class Util
     public static function getScript($runScriptPath)
     {
         $huskyrc = '~/.huskyrc';
-        $render = <<<SHELL
+        $render  = <<<SHELL
 #!/bin/bash
 # husky-php
 
@@ -276,7 +276,7 @@ SHELL;
     public static function isHusky($data)
     {
         $previousHuskyIdentifier = '# husky-php';
-        if (strpos($data, $previousHuskyIdentifier) !== false) {
+        if (\mb_strpos($data, $previousHuskyIdentifier) !== false) {
             return true;
         }
 

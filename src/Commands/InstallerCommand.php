@@ -7,7 +7,6 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
-
 class InstallerCommand extends Command
 {
     protected static $defaultName = 'husky:install';
@@ -23,6 +22,7 @@ class InstallerCommand extends Command
     {
         $installServices = new InstallServices($input, $output);
         $installServices->run();
+
         return 0;
     }
 }
