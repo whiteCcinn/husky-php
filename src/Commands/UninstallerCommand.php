@@ -7,13 +7,13 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
-use App\Services\InstallServices;
+use App\Services\UninstallServices;
 
 #[AsCommand(
-    name: 'husky:install',
-    description: 'Install husky',
+    name: 'husky:uninstall',
+    description: 'Uninstall husky'
 )]
-class InstallerCommand extends Command
+class UninstallerCommand extends Command
 {
     protected function configure()
     {
@@ -28,8 +28,8 @@ class InstallerCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $installServices = new InstallServices($input, $output);
-        $installServices->run();
+        $uninstallServices = new UninstallServices($input, $output);
+        $uninstallServices->run();
 
         return Command::SUCCESS;
     }

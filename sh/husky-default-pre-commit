@@ -2,10 +2,10 @@
 
 echo -e "husky default pre commit hook start"
 
-BIN_PATH='{{BIN_PATH}}'
+BIN_PATH='vendor/bin'
 PHP_CS_FIXER="${BIN_PATH}/php-cs-fixer"
-PHP_VERSION='{{PHP_VERSION}}'
-PHP_PROJECT_PATH='{{PHP_PROJECT_PATH}}'
+PHP_VERSION='80'
+PHP_PROJECT_PATH='/app'
 
 #cd ${PHP_PROJECT_PATH}
 # Code conflict's check

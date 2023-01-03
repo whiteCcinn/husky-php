@@ -2,49 +2,49 @@
 
 namespace App\Services;
 
-use App\Util\FileSystem;
-use App\Util\Util;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Console\Style\SymfonyStyle;
+use App\Util\FileSystem;
+use App\Util\Util;
 
 abstract class BaseServices implements BaseServicesInterface
 {
-    /** @var InputInterface */
-    protected $input;
+    protected InputInterface $input;
 
-    /** @var OutputInterface */
-    protected $output;
+    protected OutputInterface $output;
 
-    /** @var Filesystem */
-    protected $fs;
+    protected SymfonyStyle $io;
 
-    protected $conf = [
+    protected FileSystem $fs;
+
+    protected array $conf = [
         'hooks' => [
             'pre-commit' => 'husky-default-pre-commit',
         ],
     ];
 
-    protected $binFile = 'husky-php';
+    protected string $binFile = 'husky';
 
-    protected $huskyDir;
+    protected string $huskyDir;
 
-    protected $userDir;
+    protected string $userDir;
 
-    protected $phpDir;
+    protected string $phpDir;
 
-    protected $composerPath;
+    protected string|array $composerPath;
 
-    protected $composerJson;
+    protected mixed $composerJson;
 
-    const CONFIG_FILE_NAME = ['.huskyrc.json', '.huskyrc'];
+    public const CONFIG_FILE_NAME = ['.huskyrc.json', '.huskyrc'];
 
-    const GIT_DIRECTORY_NAME = '.git';
+    public const GIT_DIRECTORY_NAME = '.git';
 
-    const GIT_HOOK_DIRECTORY_NAME = 'hooks';
+    public const GIT_HOOK_DIRECTORY_NAME = 'hooks';
 
-    const U_MASK = 0755;
+    public const U_MASK = 0755;
 
-    const HOOK_LIST = [
+    public const HOOK_LIST = [
         'Applypatch-msg',
         'pre-Applypatch',
         'post-Applypatch',
@@ -68,17 +68,18 @@ abstract class BaseServices implements BaseServicesInterface
 
     public function __construct(InputInterface $input, OutputInterface $output)
     {
-        $this->input    = $input;
-        $this->output   = $output;
-        $this->fs       = new FileSystem();
+        $this->input       = $input;
+        $this->output      = $output;
+        $this->io          = new SymfonyStyle($input, $output);
+        $this->fs          = new FileSystem();
         $this->huskyDir = Util::getDirName(__DIR__, 2);
-        $this->userDir  = Util::getUserDir();
+        $this->userDir     = Util::getUserDir();
 
         $composerPath = $this->composerPath = Util::getFileOrDirPath($this->userDir, 'composer.json');
         if (\is_array($composerPath)) {
-            $this->output->writeln([
+            $this->io->error([
                 'Can\'t find composer.json, skipping Git hooks installation.',
-                'Please check that your project has a composer.json or create it and reinstall husky-php.',
+                'Please check that your project has a composer.json or create it and reinstall husky.',
             ]);
 
             exit(1);
@@ -91,7 +92,7 @@ abstract class BaseServices implements BaseServicesInterface
         }
         unset($defaultCommand);
 
-        $composerJson =\json_decode($this->fs->readFileSync($composerPath), true);
+        $composerJson = \json_decode($this->fs->readFileSync($composerPath), true);
 
         if (\json_last_error() !== JSON_ERROR_NONE) {
             $composerJson = [];
@@ -110,15 +111,15 @@ abstract class BaseServices implements BaseServicesInterface
 
     abstract protected function execute();
 
-    protected function before()
+    protected function before(): void
     {
     }
 
-    protected function after()
+    protected function after(): void
     {
     }
 
-    public function run()
+    public function run(): void
     {
         $this->before();
         $this->execute();

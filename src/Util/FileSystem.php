@@ -6,11 +6,7 @@ use Symfony\Component\Filesystem\Exception\IOException;
 
 class FileSystem extends \Symfony\Component\Filesystem\Filesystem
 {
-    /**
-     * @param $filename
-     * @param $content
-     */
-    public function writeFileSync($filename, $content)
+    public function writeFileSync(string $filename, mixed $content): void
     {
         $dir = \dirname($filename);
 
@@ -27,12 +23,8 @@ class FileSystem extends \Symfony\Component\Filesystem\Filesystem
         }
     }
 
-    /**
-     * @param $filename
-     *
-     * @return bool|string
-     */
-    public function readFileSync($filename)
+
+    public function readFileSync(string $filename): bool|string
     {
         if (!\is_readable($filename)) {
             throw new IOException(\sprintf('Unable to read to the "%s" file.', $filename), 0, null, $filename);

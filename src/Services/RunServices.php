@@ -4,11 +4,9 @@ namespace App\Services;
 
 class RunServices extends BaseServices
 {
-    protected function before()
+    protected function before(): void
     {
         $phpDir = $this->phpDir;
-
-        // Get conf from .huskyrc or .husky.json
 
         foreach (self::CONFIG_FILE_NAME as $configFileName) {
             $confFile = $phpDir . DIRECTORY_SEPARATOR . $configFileName;
@@ -25,22 +23,26 @@ class RunServices extends BaseServices
         }
     }
 
-    protected function execute()
+    protected function execute(): bool
     {
         $invokeHookName = $this->input->getArgument('hookName');
-
-        // TODO: not used
-        $gitParams = $this->input->getArgument('gitParams');
+        $dryRun         = $this->input->getOption('dry-run');
 
         if (isset($this->conf['hooks'])) {
             foreach ($this->conf['hooks'] as $configHookName => $shell) {
                 if ($configHookName === $invokeHookName) {
-                    $this->output->writeln("<info>husky > {$invokeHookName} </info>");
+                    $this->io->info("husky > {$invokeHookName}");
                     if (\mb_strtoupper(\mb_substr(PHP_OS, 0, 3)) === 'WIN') {
                         $shell = "bash ${shell}";
                     }
-                    \system($shell, $returnCode);
-                    exit($returnCode);
+
+                    $returnCode = 1;
+
+                    if (!$dryRun) {
+                        \system($shell, $returnCode);
+                    }
+
+                    return $returnCode;
                 }
             }
         }
