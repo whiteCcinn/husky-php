@@ -19,62 +19,73 @@ class InstallServices extends BaseServices
         $userDir = $this->userDir;
 
         $gitDir = $userDir . DIRECTORY_SEPARATOR . self::GIT_DIRECTORY_NAME;
-        if (!is_dir($gitDir)) {
+        if (!\is_dir($gitDir)) {
             $this->output->writeln([
                 'Can\'t find .git, skipping Git hooks installation.',
                 'Please check that you\'re in a cloned repository',
-                'or run \'git init\' to create an empty Git repository and reinstall husky.'
+                'or run \'git init\' to create an empty Git repository and reinstall husky.',
             ]);
 
             exit(1);
         }
 
         $hookDir = $gitDir . DIRECTORY_SEPARATOR . self::GIT_HOOK_DIRECTORY_NAME;
-        if (!is_dir($gitDir . DIRECTORY_SEPARATOR . self::GIT_HOOK_DIRECTORY_NAME)) {
-            mkdir($hookDir, self::U_MASK);
+        if (!\is_dir($gitDir . DIRECTORY_SEPARATOR . self::GIT_HOOK_DIRECTORY_NAME)) {
+            \mkdir($hookDir, self::U_MASK);
         }
 
         $this->rootDir = $userDir;
-        $this->hooks = array_map(function ($item) use ($hookDir) {
+        $this->hooks   = \array_map(function ($item) use ($hookDir) {
             return $hookDir . DIRECTORY_SEPARATOR . $item;
         }, self::HOOK_LIST);
 
         $this->script = Util::getScript($this->fs->makePathRelative($this->huskyDir, $this->rootDir) . $this->binFile);
 
         // default pre-commit
-        $this->fs->writeFileSync($this->conf['hooks']['pre-commit'], str_replace('{{BIN_PATH}}',
-            $this->fs->makePathRelative($this->phpDir . DIRECTORY_SEPARATOR . Util::$vendor,
-                $this->rootDir) . 'bin', $this->fs->readFileSync($this->conf['hooks']['pre-commit'])));
+        $this->fs->writeFileSync($this->conf['hooks']['pre-commit'], \str_replace(
+            '{{BIN_PATH}}',
+            $this->fs->makePathRelative(
+                $this->phpDir . DIRECTORY_SEPARATOR . Util::$vendor,
+                $this->rootDir
+            ) . 'bin',
+            $this->fs->readFileSync($this->conf['hooks']['pre-commit'])
+        ));
 
-        $this->fs->writeFileSync($this->conf['hooks']['pre-commit'], str_replace('{{PHP_PROJECT_PATH}}',
-            $this->phpDir, $this->fs->readFileSync($this->conf['hooks']['pre-commit'])));
+        $this->fs->writeFileSync($this->conf['hooks']['pre-commit'], \str_replace(
+            '{{PHP_PROJECT_PATH}}',
+            $this->phpDir,
+            $this->fs->readFileSync($this->conf['hooks']['pre-commit'])
+        ));
 
         if (isset($this->composerJson['require']['php'])) {
-            preg_match('/(?P<php_version>\d+(\.?\d)*$)/', $this->composerJson['require']['php'], $match);
+            \preg_match('/(?P<php_version>\d+(\.?\d)*$)/', $this->composerJson['require']['php'], $match);
             if (!empty($match)) {
-                $phpVersion = $match['php_version'];
-                $phpVersionArr = explode('.', $phpVersion);
-                switch (count($phpVersionArr)) {
+                $phpVersion    = $match['php_version'];
+                $phpVersionArr = \explode('.', $phpVersion);
+                switch (\count($phpVersionArr)) {
                     case 1:
                         $phpVersionArr[] = 0;
+
                         break;
                     case 2:
                         break;
                     default:
-                        $phpVersionArr = array_slice($phpVersionArr, 0, 2);
+                        $phpVersionArr = \array_slice($phpVersionArr, 0, 2);
                 }
-                $phpVersion = implode('', $phpVersionArr);
-                $this->fs->writeFileSync($this->conf['hooks']['pre-commit'], str_replace('{{PHP_VERSION}}',
-                    $phpVersion
-                    , $this->fs->readFileSync($this->conf['hooks']['pre-commit'])));
+                $phpVersion = \implode('', $phpVersionArr);
+                $this->fs->writeFileSync($this->conf['hooks']['pre-commit'], \str_replace(
+                    '{{PHP_VERSION}}',
+                    $phpVersion,
+                    $this->fs->readFileSync($this->conf['hooks']['pre-commit'])
+                ));
             }
         }
 
         // If Window Os, We need copy php-cs-fixer-config to composer bin dir
-        if (strtoupper(substr(PHP_OS, 0, 3)) === 'WIN') {
+        if (\mb_strtoupper(\mb_substr(PHP_OS, 0, 3)) === 'WIN') {
             $phpCsFixerPath = Util::getFileOrDirPath($this->phpDir, 'php-cs-fixer-config', true);
 
-            if (is_array($phpCsFixerPath)) {
+            if (\is_array($phpCsFixerPath)) {
                 $this->output->writeln([
                     'Can\'t find php-cs-fixer-config, Please add php-cs-fixer-config into composer.json',
                 ]);
@@ -109,7 +120,7 @@ class InstallServices extends BaseServices
      */
     private function createHooks()
     {
-        array_map(function ($hook) {
+        \array_map(function ($hook) {
             $this->createHook($hook);
         }, $this->hooks);
 
@@ -121,11 +132,11 @@ class InstallServices extends BaseServices
      */
     private function createHook($filename)
     {
-        $name = basename($filename);
+        $name = \basename($filename);
 
         if ($this->fs->exists($filename)) {
             // Update
-            if (Util::isHusky(file_get_contents($filename))) {
+            if (Util::isHusky(\file_get_contents($filename))) {
                 $this->writeHook($filename);
             }
 

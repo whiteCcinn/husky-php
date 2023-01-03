@@ -17,13 +17,12 @@ class RunServices extends BaseServices
                 continue;
             }
 
-            $userConf = json_decode($this->fs->readFileSync($confFile), true);
+            $userConf = \json_decode($this->fs->readFileSync($confFile), true);
 
-            if (json_last_error() === JSON_ERROR_NONE) {
-                $this->conf = array_merge($this->conf, $userConf);
+            if (\json_last_error() === JSON_ERROR_NONE) {
+                $this->conf = \array_merge($this->conf, $userConf);
             }
         }
-
     }
 
     protected function execute()
@@ -37,10 +36,10 @@ class RunServices extends BaseServices
             foreach ($this->conf['hooks'] as $configHookName => $shell) {
                 if ($configHookName === $invokeHookName) {
                     $this->output->writeln("<info>husky > {$invokeHookName} </info>");
-                    if (strtoupper(substr(PHP_OS, 0, 3)) === 'WIN') {
+                    if (\mb_strtoupper(\mb_substr(PHP_OS, 0, 3)) === 'WIN') {
                         $shell = "bash ${shell}";
                     }
-                    system($shell,$returnCode);
+                    \system($shell, $returnCode);
                     exit($returnCode);
                 }
             }

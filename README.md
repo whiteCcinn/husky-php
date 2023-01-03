@@ -1,4 +1,4 @@
-# php-husky
+# PHP Husky 🐺
 
 PHP is combined with composer to implement functionality similar to js's NPM module husky
 

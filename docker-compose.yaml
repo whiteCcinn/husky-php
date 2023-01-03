@@ -1,0 +1,14 @@
+version: '3.9'
+
+services:
+  php-8.0: &php
+    build: docker/php-8.0
+    container_name: husky-8.0
+    working_dir: /app
+    tty: true
+    volumes:
+      - .:/app:cached
+  php-8.1:
+    <<: *php
+    build: docker/php-8.1
+    container_name: husky-8.1

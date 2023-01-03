@@ -17,20 +17,20 @@ class UnInstallServices extends BaseServices
         $userDir = $this->userDir;
 
         $gitDir = $userDir . DIRECTORY_SEPARATOR . self::GIT_DIRECTORY_NAME;
-        if (!is_dir($gitDir)) {
+        if (!\is_dir($gitDir)) {
             $this->output->writeln([
                 'Can\'t find .git, skipping Git hooks installation.',
                 'Please check that you\'re in a cloned repository',
-                'or run \'git init\' to create an empty Git repository and reinstall husky.'
+                'or run \'git init\' to create an empty Git repository and reinstall husky.',
             ]);
 
             exit(1);
         }
 
-        $hookDir = $gitDir . DIRECTORY_SEPARATOR . self::GIT_HOOK_DIRECTORY_NAME;
+        $hookDir       = $gitDir . DIRECTORY_SEPARATOR . self::GIT_HOOK_DIRECTORY_NAME;
         $this->rootDir = $userDir;
 
-        $this->hooks = array_map(function ($item) use ($hookDir) {
+        $this->hooks = \array_map(function ($item) use ($hookDir) {
             return $hookDir . DIRECTORY_SEPARATOR . $item;
         }, self::HOOK_LIST);
     }
@@ -50,7 +50,7 @@ class UnInstallServices extends BaseServices
      */
     private function removeHooks()
     {
-        array_map(function ($hook) {
+        \array_map(function ($hook) {
             if ($this->canRemove($hook)) {
                 $this->removeHook($hook);
             }
@@ -66,7 +66,7 @@ class UnInstallServices extends BaseServices
      */
     private function removeHook($filename)
     {
-        return @unlink($filename);
+        return @\unlink($filename);
     }
 
     /**
@@ -77,7 +77,7 @@ class UnInstallServices extends BaseServices
     private function canRemove($filename)
     {
         if ($this->fs->exists($filename)) {
-            return Util::isHusky(file_get_contents($filename));
+            return Util::isHusky(\file_get_contents($filename));
         }
 
         return false;
