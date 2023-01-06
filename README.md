@@ -1,4 +1,9 @@
 # PHP Husky 🐺
+[![Latest Stable Version](http://poser.pugx.org/ccinn/husky-php/v)](https://packagist.org/packages/ccinn/husky-php)
+[![Total Downloads](http://poser.pugx.org/ccinn/husky-php/downloads)](https://packagist.org/packages/ccinn/husky-php)
+[![Latest Unstable Version](http://poser.pugx.org/ccinn/husky-php/v/unstable)](https://packagist.org/packages/ccinn/husky-php)
+[![License](http://poser.pugx.org/ccinn/husky-php/license)](https://packagist.org/packages/ccinn/husky-php)
+[![PHP Version Require](http://poser.pugx.org/ccinn/husky-php/require/php)](https://packagist.org/packages/ccinn/husky-php)
 
 PHP is combined with composer to implement functionality similar to js's NPM module husky
 

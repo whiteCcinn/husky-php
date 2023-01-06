@@ -19,11 +19,17 @@
     "symfony/filesystem": "^5.4|^6"
   },
   "require-dev": {
-    "friendsofphp/php-cs-fixer": "^3.13"
+    "friendsofphp/php-cs-fixer": "^3.13",
+    "phpunit/phpunit": "^9.5"
   },
   "autoload": {
     "psr-4": {
       "App\\": "src/"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "App\\Test\\": "tests/"
     }
   },
   "bin": [
@@ -31,6 +37,8 @@
     "sh/husky-default-pre-commit"
   ],
   "scripts": {
+    "test": "vendor/bin/phpunit --no-coverage -c phpunit.xml",
+    "test-testdox": "vendor/bin/phpunit --no-coverage --testdox -c phpunit.xml",
     "php-cs-fixer": "vendor/bin/php-cs-fixer fix --verbose",
     "php-cs-fixer-dry-run": "vendor/bin/php-cs-fixer fix --verbose --diff --dry-run"
   }

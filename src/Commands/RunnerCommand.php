@@ -2,29 +2,37 @@
 
 namespace App\Commands;
 
-use App\Services\RunServices;
+use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
+use App\Services\RunServices;
 
+#[AsCommand(
+    name: 'husky:run',
+    description: 'Run Git Hooks'
+)]
 class RunnerCommand extends Command
 {
-    // the name of the command (the part after "bin/console")
-    protected static $defaultName = 'husky:run';
-
     protected function configure()
     {
-        $this->setDescription('Run Hooks')
-             ->addArgument('hookName', InputArgument::REQUIRED, 'which hook trigger run')
-             ->addArgument('gitParams', InputArgument::IS_ARRAY | InputArgument::OPTIONAL, 'gitParams');
+        $this->addArgument('hookName', InputArgument::REQUIRED, 'Which hook trigger run');
+        $this->addOption(
+            'dry-run',
+            null,
+            InputOption::VALUE_OPTIONAL,
+            'Execute the trigger as a dry run.',
+            false
+        );
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $runServices = new RunServices($input, $output);
         $runServices->run();
 
-        return 0;
+        return Command::SUCCESS;
     }
 }

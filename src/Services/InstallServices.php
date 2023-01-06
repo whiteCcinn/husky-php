@@ -6,21 +6,19 @@ use App\Util\Util;
 
 class InstallServices extends BaseServices
 {
-    private $rootDir = '';
+    private array $hooks = [];
 
-    private $hooks = [];
+    private string $script = '';
 
-    private $script = '';
-
-    protected function before()
+    protected function before(): void
     {
-        $this->output->writeln('husky > setting up git hooks');
+        $this->io->title('husky > setting up git hooks');
 
         $userDir = $this->userDir;
 
         $gitDir = $userDir . DIRECTORY_SEPARATOR . self::GIT_DIRECTORY_NAME;
         if (!\is_dir($gitDir)) {
-            $this->output->writeln([
+            $this->io->error([
                 'Can\'t find .git, skipping Git hooks installation.',
                 'Please check that you\'re in a cloned repository',
                 'or run \'git init\' to create an empty Git repository and reinstall husky.',
@@ -34,19 +32,16 @@ class InstallServices extends BaseServices
             \mkdir($hookDir, self::U_MASK);
         }
 
-        $this->rootDir = $userDir;
-        $this->hooks   = \array_map(function ($item) use ($hookDir) {
-            return $hookDir . DIRECTORY_SEPARATOR . $item;
-        }, self::HOOK_LIST);
+        $this->hooks = \array_map(fn ($item) => $hookDir . DIRECTORY_SEPARATOR . $item, self::HOOK_LIST);
 
-        $this->script = Util::getScript($this->fs->makePathRelative($this->huskyDir, $this->rootDir) . $this->binFile);
+        $this->script = Util::getScript($this->fs->makePathRelative($this->huskyDir, $userDir) . $this->binFile);
 
         // default pre-commit
         $this->fs->writeFileSync($this->conf['hooks']['pre-commit'], \str_replace(
             '{{BIN_PATH}}',
             $this->fs->makePathRelative(
                 $this->phpDir . DIRECTORY_SEPARATOR . Util::$vendor,
-                $this->rootDir
+                $userDir
             ) . 'bin',
             $this->fs->readFileSync($this->conf['hooks']['pre-commit'])
         ));
@@ -59,7 +54,7 @@ class InstallServices extends BaseServices
 
         if (isset($this->composerJson['require']['php'])) {
             \preg_match('/(?P<php_version>\d+(\.?\d)*$)/', $this->composerJson['require']['php'], $match);
-            if (!empty($match)) {
+            if ($match !== []) {
                 $phpVersion    = $match['php_version'];
                 $phpVersionArr = \explode('.', $phpVersion);
                 switch (\count($phpVersionArr)) {
@@ -86,7 +81,7 @@ class InstallServices extends BaseServices
             $phpCsFixerPath = Util::getFileOrDirPath($this->phpDir, 'php-cs-fixer-config', true);
 
             if (\is_array($phpCsFixerPath)) {
-                $this->output->writeln([
+                $this->io->error([
                     'Can\'t find php-cs-fixer-config, Please add php-cs-fixer-config into composer.json',
                 ]);
 
@@ -98,62 +93,51 @@ class InstallServices extends BaseServices
             foreach ($needCopyFiles as $file) {
                 $this->fs->copy(
                     $phpCsFixerPath . DIRECTORY_SEPARATOR . $file,
-                    $this->phpDir . DIRECTORY_SEPARATOR . Util::$vendor . DIRECTORY_SEPARATOR . Util::$bin_dir . DIRECTORY_SEPARATOR . $file,
+                    $this->phpDir . DIRECTORY_SEPARATOR . Util::$vendor . DIRECTORY_SEPARATOR . Util::$binDir . DIRECTORY_SEPARATOR . $file,
                     true
                 );
             }
         }
     }
 
-    protected function execute()
+    protected function execute(): void
     {
-        $this->createHooks();
+        $dryRun = $this->input->getOption('dry-run');
+
+        if (!$dryRun) {
+            $this->createHooks();
+        }
     }
 
-    protected function after()
+    protected function after(): void
     {
-        $this->output->writeln('husky > done');
+        $this->io->writeln('husky > done');
     }
 
-    /**
-     * @return bool
-     */
-    private function createHooks()
+    private function createHooks(): void
     {
         \array_map(function ($hook) {
             $this->createHook($hook);
         }, $this->hooks);
-
-        return true;
     }
 
-    /**
-     * @param $filename
-     */
-    private function createHook($filename)
+    private function createHook(string $filename)
     {
         $name = \basename($filename);
 
         if ($this->fs->exists($filename)) {
-            // Update
-            if (Util::isHusky(\file_get_contents($filename))) {
+            if (Util::ishusky(\file_get_contents($filename))) {
                 $this->writeHook($filename);
             }
 
-            // Skip
-            $this->output->writeln("skipping existing user hook: ${name}");
+            $this->io->warning("skipping existing user hook: ${name}");
 
             return;
         }
-
-        // Create hook if it doesn't exist
         $this->writeHook($filename);
     }
 
-    /**
-     * @param $filename
-     */
-    private function writeHook($filename)
+    private function writeHook(string $filename)
     {
         $this->fs->writeFileSync($filename, $this->script);
         $this->fs->chmod($filename, self::U_MASK);
