@@ -2,11 +2,11 @@
 
 namespace App\Services;
 
+use App\Util\FileSystem;
+use App\Util\Util;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
-use App\Util\FileSystem;
-use App\Util\Util;
 
 abstract class BaseServices implements BaseServicesInterface
 {
@@ -72,7 +72,7 @@ abstract class BaseServices implements BaseServicesInterface
         $this->output      = $output;
         $this->io          = new SymfonyStyle($input, $output);
         $this->fs          = new FileSystem();
-        $this->huskyDir = Util::getDirName(__DIR__, 2);
+        $this->huskyDir    = Util::getDirName(__DIR__, 2);
         $this->userDir     = Util::getUserDir();
 
         $composerPath = $this->composerPath = Util::getFileOrDirPath($this->userDir, 'composer.json');

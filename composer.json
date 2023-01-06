@@ -2,6 +2,13 @@
   "name": "ccinn/husky-php",
   "type": "library",
   "description": "Similar to js-husky client git hook implementation",
+  "license": "MIT",
+  "support": {
+    "docs": "https://github.com/whiteCcinn/husky-php",
+    "issues": "https://github.com/whiteCcinn/husky-php/issues",
+    "source": "https://github.com/whiteCcinn/husky-php"
+  },
+  "homepage": "https://github.com/whiteCcinn/husky-php",
   "keywords": [
     "php",
     "husky"
