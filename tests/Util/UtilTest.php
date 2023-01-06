@@ -2,8 +2,8 @@
 
 namespace App\Test\Util;
 
-use PHPUnit\Framework\TestCase;
 use App\Util\Util;
+use PHPUnit\Framework\TestCase;
 
 class UtilTest extends TestCase
 {

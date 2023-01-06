@@ -2,11 +2,11 @@
 
 namespace App\Test\Commands;
 
+use App\Commands\InstallerCommand;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Tester\CommandTester;
-use App\Commands\InstallerCommand;
 
 class InstallerCommandTest extends TestCase
 {
