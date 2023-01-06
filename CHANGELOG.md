@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.4.1](https://github.com/whiteCcinn/husky-php/compare/v0.4.0...v0.4.1) (2023-01-06)
+
+
+### Docs
+
+* add License ([608b68f](https://github.com/whiteCcinn/husky-php/commit/608b68f62b0982db0ed96759a34d14b03ff05744))
+
 ## [0.4.0](https://github.com/whiteCcinn/husky-php/compare/v0.3.2...v0.4.0) (2023-01-06)
 
 
