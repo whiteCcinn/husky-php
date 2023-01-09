@@ -11,11 +11,16 @@ PHP is combined with composer to implement functionality similar to js's NPM mod
 
 Husky can prevent bad `git commit`, `git push` and more git's hooks
 
+## Code Contributors
+
+This project exists thanks to all the people who contribute. [[Contribute](https://github.com/whiteCcinn/husky-php/graphs/contributors)].
+<a href="https://github.com/whiteCcinn/husky-php/graphs/contributors"><img src="https://opencollective.com/husky-php/contributors.svg?width=890&button=false" /></a>
+
 ## Branch
 
 - v5.6-7.3.x => "ccinn/husky-php": "^0.1.0"
 - v7.4 => "ccinn/husky-php": "^0.2.0"
-- v8.0.0 => "ccinn/husky-php": "^0.3.0"
+- v8.0.0 => "ccinn/husky-php": "^0.4.0"
 
 
 ## Install
@@ -25,7 +30,7 @@ In composer.json
 ```
     "require-dev": {
         "ccinn/composer-husky-plugin": "^0.1.0",
-        "ccinn/husky-php": "^0.3.0"
+        "ccinn/husky-php": "^0.4.0"
     },
 ```
 
