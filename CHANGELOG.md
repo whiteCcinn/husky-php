@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.4.2](https://github.com/whiteCcinn/husky-php/compare/v0.4.1...v0.4.2) (2023-01-09)
+
+
+### Docs
+
+* add code contributors ([843e3e5](https://github.com/whiteCcinn/husky-php/commit/843e3e5f8cdb552300b1803f42377d1bb3e8d886))
+
 ## [0.4.1](https://github.com/whiteCcinn/husky-php/compare/v0.4.0...v0.4.1) (2023-01-06)
 
 
